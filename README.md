@@ -8,7 +8,7 @@ As I worked with this code-base, I could see the value in how it combined a fron
 ## Current enhancement list:
 ### 1) Support for customizing the front page text without making code changes
 - The text areas on the chat page ((title, welcome text, user input placeholder) are very important descriptors since this chatbot can interact with a wide range of pdfs (e.g legal documents, documentation, help files, books, etc.)  Currently the text for the chat page elements can only be modified within the code for the main page (`pages/index.tsx`).  And these changes would be overwritten by any updates to the repo.  My enhancement parameterizes all key page elements and allows users of this repo to specify them in the .env file.
-- A [pull request](https://github.com/mayooear/gpt4-pdf-chatbot-langchain/pull/312) has been made for this change in Mayo's repo.
+- A [pull request](https://github.com/mayooear/gpt4-pdf-chatbot-langchain/pull/313) has been made for this change in Mayo's repo.
 ### 2) Support for docker and deploying to the web (e.g via fly.io). `(pending)`
 ### 3) More condensed UI and better automated scrolling more like ChatGPT `(pending)`
 ### 4) Integrating more controls for the selecting and configuring conversational chains`(pending)`
