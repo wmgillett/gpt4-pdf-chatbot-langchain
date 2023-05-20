@@ -29,11 +29,11 @@ The tech stack used in Mayo's repo is well-chosen and essentially unchanged - La
 1) Node.js - version is 18 or greater.
 
 ## Installation
-1. Clone the repo or download the ZIP
+### 1. Clone the repo or download the ZIP
 ```
 git clone [github https url]
 ```
-2. Install packages
+### 2. Install packages
 
 Install yarn globally (if you haven't already).
 ```
@@ -45,7 +45,7 @@ yarn install
 ```
 After installation, you should now see a `node_modules` folder.
 
-3. Set up your `.env` file (Copy `.env.example` into `.env` in your project root folder)
+### 3. Set up your `.env` file (Copy `.env.example` into `.env` in your project root folder)
 ```
 cp .env.example .env
 ```
@@ -56,7 +56,7 @@ PINECONE_API_KEY=
 PINECONE_ENVIRONMENT=
 PINECONE_INDEX_NAME=
 PINECONE_NAME_SPACE=
-# static text on chat page - change if you want new values
+# `Optional` - static text on chat page - change if you want new values from defaults
 CHAT_PAGE_TITLE=Chat with Your Favorite Author
 WELCOME_MESSAGE=Hi, what would you like to learn about this book?
 USER_INPUT_PLACEHOLDER=What is the book about??
@@ -75,13 +75,13 @@ Currently this chain from Mayo's repo is built on the [Conversational Retrieval 
 
 **This repo can load multiple PDF files**
 
-1. Create a `docs` folder off the project root, add your pdf files or folders that contain pdf files.
+### 1. Create a `docs` folder off the project root, add your pdf files or folders that contain pdf files.
 
-2. Run the script `npm run ingest` to 'ingest' and embed your docs. If you run into errors troubleshoot below.
+### 2. Run the script `npm run ingest` to 'ingest' and embed your docs. If you run into errors troubleshoot below.
 ```
 npm run ingest
 ```
-3. Check Pinecone dashboard to verify your namespace and vectors have been added.
+### 3. Check Pinecone dashboard to verify your namespace and vectors have been added.
 
 ## Run the app locally `(dev)`
 
@@ -89,8 +89,40 @@ Once you've verified that the embeddings and content have been successfully adde
 ```
 npm run dev
 ```
-### Run the app in the cloud
-`(details coming in next update)`
+## Run the app in the cloud `(fly.io)`
+Fly.io is a low-cost hosting site that can easily configure and deploy an app like this.  
+Follow these instructions or refer to the [full documentation](https://fly.io/docs/) on fly.io  
+### 1. Create an account on [Fly.io](https://fly.io/)
+### 2. Install flyctl (fly's cli) locally - follow this [guide on fly.io](https://fly.io/docs/hands-on/install-flyctl/)
+### 3. Authenticate with fly.io
+```
+$ fly auth login
+```
+### 4. Create ("launch") your app (within the root of your project directory)
+```
+$ fly launch
+```
+- follow prompts to create an app name and specify a regtion 
+- Note with this app there is no need to create a database - so chose 'n' when prompted
+- this process will create/update 3 files - dockerfile, .dockerignore, fly.toml
+### 5. Create fly secrets for fields in .env
+`Mandatory fields:`
+```
+$ flyclt secrets set OPENAI_API_KEY=XXXXXX PINECONE_API_KEY=XXXX PINECONE_ENVIRONMENT=XXX PINECONE_INDEX_NAME=XXX
+```
+`Optional fields:`
+```
+$ flyclt secrets set CHAT_PAGE_TITLE="Chat With Your Legal Docs" WELCOME_MESSAGE="Hi, ..." USER_INPUT_PLACEHOLDER="What is this...?"
+FOOTER_URL=https://twitter.com/... FOOTER_TEXT="Powered by LangChainAI..."
+```
+- note you can create them in one command leaving a space between each field=value entrie.  For fields with spaces you need to add quotes.  
+- Default values will be used for any optional field not specified.
+### 6. Deploy app 
+```
+$ fly deploy
+```
+ - You will see the url for your application from the console output - e.g. my-app/.fly.dev/#
+
 
 ## Troubleshooting
 
