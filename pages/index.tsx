@@ -34,9 +34,22 @@ export default function Home() {
   });
 
   const { messages, history } = messageState;
-
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  const [expandedSection, setExpandedSection] = useState<number | null>(null);
+  
+// Scroll to bottom whenever messages change
+useEffect(() => {
+  messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
+}, [messages]);
+// make the user input field focused on page load
+useEffect(() => {
+  textAreaRef.current?.focus();
+}, [messages]);
+
+  //const messageListRef = useRef<HTMLDivElement>(null);
+  //const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -150,7 +163,10 @@ export default function Home() {
       e.preventDefault();
     }
   };
-
+  // Scroll to bottom after initial rendering
+  useEffect(() => {
+    messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
+  }, []);
   return (
     <>
       <Layout>
@@ -215,23 +231,38 @@ export default function Home() {
                             collapsible
                             className="flex-col"
                           >
-                            {message.sourceDocs.map((doc, index) => (
-                              <div key={`messageSourceDocs-${index}`}>
-                                <AccordionItem value={`item-${index}`}>
-                                  <AccordionTrigger>
-                                    <h3>Source {index + 1}</h3>
-                                  </AccordionTrigger>
-                                  <AccordionContent>
-                                    <ReactMarkdown linkTarget="_blank">
-                                      {doc.pageContent}
-                                    </ReactMarkdown>
-                                    <p className="mt-2">
-                                      <b>Source:</b> {doc.metadata.source}
-                                    </p>
-                                  </AccordionContent>
-                                </AccordionItem>
-                              </div>
-                            ))}
+                            <AccordionItem value="top-level-item">
+                              <AccordionTrigger onClick={() => setExpandedSection(expandedSection === null ? 0 : null)}>
+                                <div className="flex justify-between items-center">
+                                  <h3>Sources</h3>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <Accordion
+                                  type="single"
+                                  collapsible
+                                  className="flex-col"
+                                >
+                                  {message.sourceDocs.map((doc, index) => (
+                                    <div key={`messageSourceDocs-${index}`}>
+                                      <AccordionItem value={`item-${index}`}>
+                                        <AccordionTrigger>
+                                          <h3>Source {index + 1}</h3>
+                                        </AccordionTrigger>
+                                        <AccordionContent>
+                                          <ReactMarkdown linkTarget="_blank">
+                                            {doc.pageContent}
+                                          </ReactMarkdown>
+                                          <p className="mt-2">
+                                            <b>Source:</b> {doc.metadata.source}
+                                          </p>
+                                        </AccordionContent>
+                                      </AccordionItem>
+                                    </div>
+                                  ))}
+                                </Accordion>
+                              </AccordionContent>
+                            </AccordionItem>
                           </Accordion>
                         </div>
                       )}
