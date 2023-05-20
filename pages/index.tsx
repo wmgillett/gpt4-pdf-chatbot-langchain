@@ -43,13 +43,10 @@ export default function Home() {
 useEffect(() => {
   messageListRef.current?.scrollTo(0, messageListRef.current.scrollHeight);
 }, [messages]);
-// make the user input field focused on page load
+// make focus on the user input field on page load
 useEffect(() => {
   textAreaRef.current?.focus();
 }, [messages]);
-
-  //const messageListRef = useRef<HTMLDivElement>(null);
-  //const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     textAreaRef.current?.focus();
